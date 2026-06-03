@@ -1,0 +1,1 @@
+Design: Follow design.md exactly. Dark canvas only. No light mode. Plus Jakarta Sans for headings, Inter for body. Color palette: Primary #7C3AED, Accent #EC4899, Highlight #F59E0B, Background #0A0A0F, Surface #13131A, Border #2A2A35, Text #FFFFFF, Muted #94A3B8.
