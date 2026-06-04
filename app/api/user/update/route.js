@@ -13,7 +13,7 @@ export async function PATCH(request) {
   }
 
   const data = await request.json();
-  const { name, username, bio } = data;
+  const { name, username, bio, theme } = data;
 
   await connectToDatabase();
   const user = await User.findOne({ email: session.user.email });
@@ -25,6 +25,7 @@ export async function PATCH(request) {
   // Update fields
   if (name !== undefined) user.name = name;
   if (bio !== undefined) user.bio = bio;
+  if (theme !== undefined) user.theme = theme;
 
   if (username !== undefined) {
     // If username is changed, validate and check availability
