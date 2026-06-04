@@ -1,17 +1,13 @@
 "use client";
 
 import { useState, useCallback, useEffect } from "react";
-import {
-    Card,
-    CardContent,
-    CardHeader,
-    CardTitle,
-} from "../../../components/ui/card";
-import { Button } from "../../../components/ui/button";
-import { Input } from "../../../components/ui/input";
-import { Textarea } from "../../../components/ui/textarea";
 import { toast } from "sonner";
 import { Camera, Check, X } from "lucide-react";
+import { Plus_Jakarta_Sans, Inter } from "next/font/google";
+import { getRandomEmoji, getAvatarBgColor } from "../../../lib/avatar";
+
+const plusJakarta = Plus_Jakarta_Sans({ subsets: ["latin"] });
+const inter = Inter({ subsets: ["latin"] });
 
 const USERNAME_REGEX = /^[a-z0-9_]{3,20}$/;
 
@@ -101,9 +97,7 @@ export default function SettingsForm({ user: initialUser }) {
                 method: "PATCH",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
-                    name: user.name,
                     username: user.username,
-                    bio: user.bio,
                 }),
             });
             if (res.ok) {
@@ -120,133 +114,99 @@ export default function SettingsForm({ user: initialUser }) {
     };
 
     return (
-        <Card className="bg-[#13131A] border-[#2A2A35] rounded-xl">
-            <CardHeader>
-                <CardTitle className="text-xl font-bold text-white">
-                    Profile
-                </CardTitle>
-            </CardHeader>
-            <CardContent>
-                <form onSubmit={handleSubmit} className="space-y-6">
-                    {/* Avatar upload */}
-                    <div className="flex items-center gap-4">
-                        <div className="relative group">
+        <div className="bg-[#141414] rounded-[20px] p-6 border border-[#262626]">
+            <h2 className={`${plusJakarta.className} text-xl font-bold text-white mb-6`} style={{ letterSpacing: "-1.0px" }}>
+                Profile
+            </h2>
+            <form onSubmit={handleSubmit} className="space-y-6">
+                {/* Avatar upload */}
+                <div className="flex items-center gap-4">
+                    <div className="relative group">
+                        {user.avatarUrl || user.image ? (
                             <img
                                 src={user.avatarUrl || user.image}
                                 alt={user.name}
                                 className="w-20 h-20 rounded-full object-cover"
                             />
-                            <label className="absolute inset-0 bg-black/50 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
-                                {isUploading ? (
-                                    <div className="w-6 h-6 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                                ) : (
-                                    <Camera className="w-6 h-6 text-white" />
-                                )}
-                                <input
-                                    type="file"
-                                    accept="image/*"
-                                    className="hidden"
-                                    onChange={handleAvatarUpload}
-                                    disabled={isUploading}
-                                />
-                            </label>
-                        </div>
-                    </div>
-
-                    {/* Name input */}
-                    <div className="space-y-2">
-                        <label className="text-sm font-medium text-white">
-                            Display Name
-                        </label>
-                        <Input
-                            value={user.name}
-                            onChange={(e) =>
-                                setUser((prev) => ({
-                                    ...prev,
-                                    name: e.target.value,
-                                }))
-                            }
-                            className="w-full bg-transparent border border-[#2A2A35] text-white placeholder:text-[#94A3B8] rounded-full focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED]"
-                        />
-                    </div>
-
-                    {/* Username input */}
-                    <div className="space-y-2">
-                        <label className="text-sm font-medium text-white">
-                            Username
-                        </label>
-                        <div className="relative">
-                            <Input
-                                value={user.username}
-                                onChange={(e) =>
-                                    setUser((prev) => ({
-                                        ...prev,
-                                        username: e.target.value.toLowerCase(),
-                                    }))
-                                }
-                                className="w-full bg-transparent border border-[#2A2A35] text-white placeholder:text-[#94A3B8] rounded-full pr-10 focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED]"
-                            />
-                            <div className="absolute right-3 top-1/2 -translate-y-1/2">
-                                {usernameStatus === "available" && (
-                                    <Check className="w-5 h-5 text-green-400" />
-                                )}
-                                {(usernameStatus === "taken" ||
-                                    usernameStatus === "invalid") && (
-                                    <X className="w-5 h-5 text-red-400" />
-                                )}
+                        ) : (
+                            <div
+                                className="w-20 h-20 rounded-full flex items-center justify-center text-4xl"
+                                style={{ backgroundColor: getAvatarBgColor(user._id) }}
+                            >
+                                {getRandomEmoji(user._id)}
                             </div>
-                        </div>
-                        {usernameStatus === "taken" && (
-                            <p className="text-xs text-red-400">
-                                Username is already taken
-                            </p>
                         )}
-                        {usernameStatus === "invalid" && (
-                            <p className="text-xs text-red-400">
-                                Username must be 3-20 lowercase letters,
-                                numbers, or underscores
-                            </p>
-                        )}
+                        <label className="absolute inset-0 bg-black/50 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
+                            {isUploading ? (
+                                <div className="w-6 h-6 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                            ) : (
+                                <Camera className="w-6 h-6 text-white" />
+                            )}
+                            <input
+                                type="file"
+                                accept="image/*"
+                                className="hidden"
+                                onChange={handleAvatarUpload}
+                                disabled={isUploading}
+                            />
+                        </label>
                     </div>
+                </div>
 
-                    {/* Bio textarea */}
-                    <div className="space-y-2">
-                        <div className="flex justify-between items-center">
-                            <label className="text-sm font-medium text-white">
-                                Bio
-                            </label>
-                            <span className="text-xs text-[#94A3B8]">
-                                {user.bio?.length || 0}/160
-                            </span>
-                        </div>
-                        <Textarea
-                            value={user.bio || ""}
+                {/* Username input */}
+                <div className="space-y-2">
+                    <label className="text-white" style={{ fontFamily: "var(--font-inter)", fontSize: "14px", fontWeight: "500", letterSpacing: "-0.14px", lineHeight: "1.40" }}>
+                        Username
+                    </label>
+                    <div className="relative">
+                        <input
+                            value={user.username}
                             onChange={(e) =>
                                 setUser((prev) => ({
                                     ...prev,
-                                    bio: e.target.value.slice(0, 160),
+                                    username: e.target.value.toLowerCase(),
                                 }))
                             }
-                            maxLength={160}
-                            className="w-full bg-transparent border border-[#2A2A35] text-white placeholder:text-[#94A3B8] rounded-xl focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED] resize-none"
-                            rows={4}
+                            className="w-full px-4 py-3 bg-[#141414] text-white placeholder:text-[#999999] border border-[#262626] rounded-[10px] pr-10 focus:outline-none focus:ring-2 focus:ring-[#0099ff]/50"
+                            style={{ fontFamily: "var(--font-inter)", fontSize: "15px", letterSpacing: "-0.15px", lineHeight: "1.30" }}
                         />
+                        <div className="absolute right-3 top-1/2 -translate-y-1/2">
+                            {usernameStatus === "available" && (
+                                <Check className="w-5 h-5 text-[#22c55e]" />
+                            )}
+                            {(usernameStatus === "taken" ||
+                                usernameStatus === "invalid") && (
+                                <X className="w-5 h-5 text-red-400" />
+                            )}
+                        </div>
                     </div>
+                    {usernameStatus === "taken" && (
+                        <p className="text-red-400" style={{ fontFamily: "var(--font-inter)", fontSize: "12px", fontWeight: "400", letterSpacing: "-0.12px", lineHeight: "1.20" }}>
+                            Username is already taken
+                        </p>
+                    )}
+                    {usernameStatus === "invalid" && (
+                        <p className="text-red-400" style={{ fontFamily: "var(--font-inter)", fontSize: "12px", fontWeight: "400", letterSpacing: "-0.12px", lineHeight: "1.20" }}>
+                            Username must be 3-20 lowercase letters,
+                            numbers, or underscores
+                        </p>
+                    )}
+                </div>
 
-                    {/* Save button */}
-                    <Button
-                        type="submit"
-                        disabled={
-                            isSaving ||
-                            (usernameStatus !== "idle" &&
-                                usernameStatus !== "available")
-                        }
-                        className="w-full rounded-full bg-gradient-to-r from-violet-600 via-pink-500 to-amber-400 hover:opacity-90"
-                    >
-                        {isSaving ? "Saving..." : "Save changes"}
-                    </Button>
-                </form>
-            </CardContent>
-        </Card>
+                {/* Save button */}
+                <button
+                    type="submit"
+                    disabled={
+                        isSaving ||
+                        (usernameStatus !== "idle" &&
+                            usernameStatus !== "available")
+                    }
+                    className="w-full px-4 py-3 rounded-full bg-white text-black font-medium hover:bg-white/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    style={{ fontFamily: "var(--font-inter)", fontSize: "14px", letterSpacing: "-0.14px", lineHeight: "1.0" }}
+                >
+                    {isSaving ? "Saving..." : "Save changes"}
+                </button>
+            </form>
+        </div>
     );
 }
