@@ -5,14 +5,18 @@ import { connectToDatabase } from "../../lib/db";
 import User from "../../models/User";
 import LinkModel from "../../models/Link";
 import { getTheme } from "../../lib/themes";
+import { getRandomEmoji, getAvatarBgColor } from "../../lib/avatar";
 import BioLinks from "../../components/BioLinks";
+
+export const runtime = "nodejs";
 
 const plusJakarta = Plus_Jakarta_Sans({ subsets: ["latin"] });
 const inter = Inter({ subsets: ["latin"] });
 
 export async function generateMetadata({ params }) {
+    const { username } = await params;
     await connectToDatabase();
-    const user = await User.findOne({ username: params.username });
+    const user = await User.findOne({ username });
 
     if (!user) {
         return {
@@ -31,8 +35,9 @@ export async function generateMetadata({ params }) {
 }
 
 export default async function BioPage({ params }) {
+    const { username } = await params;
     await connectToDatabase();
-    const user = await User.findOne({ username: params.username });
+    const user = await User.findOne({ username });
 
     if (!user) {
         notFound();
@@ -46,10 +51,11 @@ export default async function BioPage({ params }) {
     const theme = getTheme(user.theme);
 
     // Convert MongoDB document to plain object
-    const serializedLinks = links.map(link => ({
+    const serializedLinks = links.map((link) => ({
         _id: link._id.toString(),
         title: link.title,
-        url: link.url
+        url: link.url,
+        icon: link.icon,
     }));
 
     return (
@@ -57,8 +63,8 @@ export default async function BioPage({ params }) {
             <body
                 className={`${inter.className} min-h-screen`}
                 style={{
-                    backgroundColor: theme.bgColor,
-                    color: theme.textColor,
+                    background: `${theme.bgPattern}, ${theme.bgGradient}`,
+                    backgroundSize: `${theme.bgPatternSize}, cover`,
                 }}
             >
                 <main className="max-w-md mx-auto py-16 sm:py-20 px-4 sm:px-6">
@@ -68,24 +74,47 @@ export default async function BioPage({ params }) {
                                 className="absolute -inset-1 rounded-full blur-md opacity-50"
                                 style={{ background: theme.accentGradient }}
                             />
-                            <img
-                                src={user.avatarUrl || user.image}
-                                alt={user.name}
-                                className="relative w-16 sm:w-20 md:w-24 h-16 sm:h-20 md:h-24 rounded-full object-cover border-2"
-                                style={{ borderColor: theme.borderColor }}
-                            />
+                            {user.avatarUrl || user.image ? (
+                                <img
+                                    src={user.avatarUrl || user.image}
+                                    alt={user.name}
+                                    className="relative w-16 sm:w-20 md:w-24 h-16 sm:h-20 md:h-24 rounded-full object-cover border-2"
+                                    style={{ borderColor: theme.borderColor }}
+                                />
+                            ) : (
+                                <div
+                                    className="relative w-16 sm:w-20 md:w-24 h-16 sm:h-20 md:h-24 rounded-full flex items-center justify-center text-3xl sm:text-4xl md:text-5xl border-2"
+                                    style={{
+                                        backgroundColor: getAvatarBgColor(
+                                            user._id.toString(),
+                                        ),
+                                        borderColor: theme.borderColor,
+                                    }}
+                                >
+                                    {getRandomEmoji(user._id.toString())}
+                                </div>
+                            )}
                         </div>
 
                         <div className="space-y-1">
                             <h1
-                                className={`${plusJakarta.className} text-xl sm:text-2xl font-bold tracking-tight`}
-                                style={{ color: theme.textColor }}
+                                className={`${plusJakarta.className} text-xl sm:text-2xl font-bold`}
+                                style={{
+                                    color: theme.textColor,
+                                    letterSpacing: "-1.0px",
+                                }}
                             >
                                 {user.name}
                             </h1>
                             <p
                                 className="text-sm"
-                                style={{ color: theme.mutedColor }}
+                                style={{
+                                    color: theme.mutedColor,
+                                    fontFamily: "var(--font-inter)",
+                                    fontSize: "15px",
+                                    letterSpacing: "-0.15px",
+                                    lineHeight: "1.30",
+                                }}
                             >
                                 @{user.username}
                             </p>
@@ -94,7 +123,13 @@ export default async function BioPage({ params }) {
                         {user.bio && (
                             <p
                                 className="text-sm sm:text-base leading-relaxed max-w-sm mx-auto"
-                                style={{ color: theme.mutedColor }}
+                                style={{
+                                    color: theme.mutedColor,
+                                    fontFamily: "var(--font-inter)",
+                                    fontSize: "15px",
+                                    letterSpacing: "-0.15px",
+                                    lineHeight: "1.30",
+                                }}
                             >
                                 {user.bio}
                             </p>
@@ -109,13 +144,37 @@ export default async function BioPage({ params }) {
                         {!user.isPro && (
                             <p
                                 className="text-xs mt-12"
-                                style={{ color: theme.mutedColor }}
+                                style={{
+                                    color: theme.mutedColor,
+                                    fontFamily: "var(--font-inter)",
+                                    fontSize: "12px",
+                                    letterSpacing: "-0.12px",
+                                    lineHeight: "1.20",
+                                }}
                             >
                                 Made with Snapbio
                             </p>
                         )}
                     </div>
                 </main>
+                <Link
+                    href={
+                        process.env.NEXT_PUBLIC_SITE_URL ||
+                        "https://snapbio.usersynax.dev"
+                    }
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={`fixed bottom-6 right-6 px-6 py-3 rounded-full text-sm font-medium transition-all duration-200 shadow-lg ${inter.className}`}
+                    style={{
+                        background: theme.buttonBg,
+                        color: theme.buttonText,
+                        fontSize: "14px",
+                        letterSpacing: "-0.14px",
+                        lineHeight: "1.0",
+                    }}
+                >
+                    Get your links page
+                </Link>
             </body>
         </html>
     );
