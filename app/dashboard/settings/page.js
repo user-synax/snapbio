@@ -8,6 +8,19 @@ export default async function SettingsPage() {
     await connectToDatabase();
     const user = await User.findOne({ email: session.user.email });
 
+    // Convert to plain object to pass to client component
+    const serializedUser = {
+        _id: user._id.toString(),
+        name: user.name,
+        email: user.email,
+        username: user.username,
+        bio: user.bio,
+        avatarUrl: user.avatarUrl,
+        image: user.image,
+        isPro: user.isPro,
+        theme: user.theme,
+    };
+
     return (
         <div className="space-y-6 max-w-2xl mx-auto">
             <div>
@@ -19,7 +32,7 @@ export default async function SettingsPage() {
                 </p>
             </div>
 
-            <SettingsForm user={user} />
+            <SettingsForm user={serializedUser} />
         </div>
     );
 }
