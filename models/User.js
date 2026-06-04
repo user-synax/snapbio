@@ -15,10 +15,14 @@ const UserSchema = new mongoose.Schema(
     image: {
       type: String,
     },
+    password: {
+      type: String,
+    },
     username: {
       type: String,
-      required: true,
+      required: false,
       unique: true,
+      sparse: true,
     },
     bio: {
       type: String,
@@ -26,14 +30,21 @@ const UserSchema = new mongoose.Schema(
     },
     avatarUrl: {
       type: String,
+      default: "",
     },
+    links: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Link",
+      },
+    ],
     isPro: {
       type: Boolean,
       default: false,
     },
     theme: {
       type: String,
-      default: "default",
+      default: "warm-sand",
     },
   },
   {
