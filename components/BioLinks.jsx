@@ -1,11 +1,13 @@
-'use client'
 
-import ThemeButton from './ThemeButton'
+"use client";
 
-export default function BioLinks({ 
-  links, 
-  theme, 
-  userId 
+import ThemeButton from "./ThemeButton";
+import * as faIcons from "react-icons/fa";
+
+export default function BioLinks({
+  links,
+  theme,
+  userId
 }) {
   const handleLinkClick = (linkId) => {
     // Fire and forget
@@ -20,19 +22,24 @@ export default function BioLinks({
   };
 
   return (
-    <div className="space-y-3 mt-8">
-      {links.map((link) => (
-        <ThemeButton
-          key={link._id}
-          href={link.url}
-          buttonBg={theme.buttonBg}
-          buttonHoverBg={theme.buttonHoverBg}
-          buttonText={theme.buttonText}
-          onClick={() => handleLinkClick(link._id)}
-        >
-          {link.title}
-        </ThemeButton>
-      ))}
+    <div className="space-y-4 mt-8">
+      {links.map((link) => {
+        const IconComponent = link.icon ? faIcons[`Fa${link.icon}`] : null;
+        return (
+          <ThemeButton
+            key={link._id}
+            href={link.url}
+            buttonBg={theme.buttonBg}
+            buttonHoverBg={theme.buttonHoverBg}
+            buttonText={theme.buttonText}
+            buttonHoverShadow={theme.buttonHoverShadow}
+            onClick={() => handleLinkClick(link._id)}
+            icon={IconComponent}
+          >
+            {link.title}
+          </ThemeButton>
+        );
+      })}
     </div>
   );
 }
