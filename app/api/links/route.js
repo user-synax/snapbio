@@ -13,7 +13,7 @@ export async function POST(request) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const { title, url } = await request.json();
+  const { title, url, icon } = await request.json();
 
   await connectToDatabase();
   const user = await User.findOne({ email: session.user.email });
@@ -32,6 +32,7 @@ export async function POST(request) {
     userId: user._id,
     title,
     url,
+    icon: icon || null,
     order: linkCount,
     isActive: true,
   });
