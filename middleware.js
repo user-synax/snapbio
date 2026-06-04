@@ -11,6 +11,7 @@ export async function middleware(request) {
   const publicPaths = [
     "/",
     "/auth/signin",
+    "/auth/signup",
     "/auth/signout",
     "/api/auth",
     "/api/username",
