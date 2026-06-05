@@ -69,24 +69,44 @@ export default function AnalyticsDashboard() {
                     Analytics
                 </h1>
                 <div className="flex gap-2">
-                    {[
-                        { label: "7 Days", value: "7d" },
-                        { label: "30 Days", value: "30d" },
-                        { label: "All Time", value: "all" },
-                    ].map((tab) => (
-                        <button
-                            key={tab.value}
-                            onClick={() => setRange(tab.value)}
-                            className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-                                range === tab.value
-                                    ? "bg-[#1c1c1c] text-white"
-                                    : "bg-[#090909] text-[#999999] hover:bg-[#141414]"
-                            }`}
+                    <div className="hidden md:flex gap-2">
+                        {[
+                            { label: "7 Days", value: "7d" },
+                            { label: "30 Days", value: "30d" },
+                            { label: "All Time", value: "all" },
+                        ].map((tab) => (
+                            <button
+                                key={tab.value}
+                                onClick={() => setRange(tab.value)}
+                                className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+                                    range === tab.value
+                                        ? "bg-[#1c1c1c] text-white"
+                                        : "bg-[#090909] text-[#999999] hover:bg-[#141414]"
+                                }`}
+                                style={{ fontFamily: "var(--font-inter)", fontSize: "14px", letterSpacing: "-0.14px", lineHeight: "1.0" }}
+                            >
+                                {tab.label}
+                            </button>
+                        ))}
+                    </div>
+                    <div className="md:hidden">
+                        <select
+                            value={range}
+                            onChange={(e) => setRange(e.target.value)}
+                            className="px-4 py-2 rounded-full text-sm font-medium bg-[#1c1c1c] text-white border-none focus:outline-none focus:ring-2 focus:ring-[#6a4cf5]"
                             style={{ fontFamily: "var(--font-inter)", fontSize: "14px", letterSpacing: "-0.14px", lineHeight: "1.0" }}
                         >
-                            {tab.label}
-                        </button>
-                    ))}
+                            {[
+                                { label: "7 Days", value: "7d" },
+                                { label: "30 Days", value: "30d" },
+                                { label: "All Time", value: "all" },
+                            ].map((tab) => (
+                                <option key={tab.value} value={tab.value} className="bg-[#090909] text-white">
+                                    {tab.label}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
                 </div>
             </div>
 
