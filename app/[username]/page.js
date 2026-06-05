@@ -21,15 +21,63 @@ export async function generateMetadata({ params }) {
     if (!user) {
         return {
             title: "404 Not Found | Snapbio",
+            icons: {
+                icon: [
+                    { url: "/favicon.ico" },
+                    { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
+                    { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
+                ],
+                apple: [
+                    { url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
+                ],
+                other: [
+                    {
+                        rel: "android-chrome-192x192",
+                        url: "/android-chrome-192x192.png",
+                        sizes: "192x192",
+                        type: "image/png",
+                    },
+                    {
+                        rel: "android-chrome-512x512",
+                        url: "/android-chrome-512x512.png",
+                        sizes: "512x512",
+                        type: "image/png",
+                    },
+                ],
+            },
         };
     }
 
     return {
         title: `@${user.username} | Snapbio`,
         description: user.bio || "",
+        icons: {
+            icon: [
+                { url: "/favicon.ico" },
+                { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
+                { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
+            ],
+            apple: [
+                { url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
+            ],
+            other: [
+                {
+                    rel: "android-chrome-192x192",
+                    url: "/android-chrome-192x192.png",
+                    sizes: "192x192",
+                    type: "image/png",
+                },
+                {
+                    rel: "android-chrome-512x512",
+                    url: "/android-chrome-512x512.png",
+                    sizes: "512x512",
+                    type: "image/png",
+                },
+            ],
+        },
         openGraph: {
             title: `@${user.username} | Snapbio`,
-            description: user.bio || "",
+            description: user.bio || "No bio available.",
         },
     };
 }
@@ -68,7 +116,10 @@ export default async function BioPage({ params }) {
                 }}
             >
                 <main className="max-w-md mx-auto py-16 sm:py-20 px-4 sm:px-6">
-                    <div className="text-center space-y-4">
+                    <div className="text-center space-y-4 rounded-[32px] border backdrop-blur-xl p-8" style={{
+                        background: theme.cardColor,
+                        borderColor: theme.cardBorder || theme.borderColor,
+                    }}>
                         <div className="relative inline-block">
                             <div
                                 className="absolute -inset-1 rounded-full blur-md opacity-50"
@@ -152,7 +203,7 @@ export default async function BioPage({ params }) {
                                     lineHeight: "1.20",
                                 }}
                             >
-                                Made with Snapbio
+                                Made with <a href="https://snapbio.usersynax.dev" target="_blank" rel="noopener noreferrer" style={{ color: theme.accentGradient }} className="underline">Snapbio</a>
                             </p>
                         )}
                     </div>
@@ -164,7 +215,7 @@ export default async function BioPage({ params }) {
                     }
                     target="_blank"
                     rel="noopener noreferrer"
-                    className={`fixed bottom-6 right-6 px-6 py-3 rounded-full text-sm font-medium transition-all duration-200 shadow-lg ${inter.className}`}
+                    className={`fixed bottom-6 right-6 px-6 py-3 rounded-full text-sm font-medium transition-all duration-200 shadow-lg flex items-center gap-2 ${inter.className}`}
                     style={{
                         background: theme.buttonBg,
                         color: theme.buttonText,
@@ -173,6 +224,11 @@ export default async function BioPage({ params }) {
                         lineHeight: "1.0",
                     }}
                 >
+                    <img
+                        src="/favicon-32x32.png"
+                        alt="Snapbio"
+                        className="w-5 h-5"
+                    />
                     Get your links page
                 </Link>
             </body>
