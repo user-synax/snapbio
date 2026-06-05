@@ -1,8 +1,9 @@
 "use client";
 
 import { useState, useCallback, useEffect } from "react";
+import { signOut } from "next-auth/react";
 import { toast } from "sonner";
-import { Camera, Check, X } from "lucide-react";
+import { Camera, Check, X, LogOut } from "lucide-react";
 import { Plus_Jakarta_Sans, Inter } from "next/font/google";
 import { getRandomEmoji, getAvatarBgColor } from "../../../lib/avatar";
 
@@ -207,6 +208,18 @@ export default function SettingsForm({ user: initialUser }) {
                     {isSaving ? "Saving..." : "Save changes"}
                 </button>
             </form>
+
+            {/* Logout section */}
+            <div className="mt-8 pt-6 border-t border-[#262626]">
+                <button
+                    onClick={() => signOut({ callbackUrl: "/" })}
+                    className="w-full px-4 py-3 rounded-full bg-red-500/10 text-red-400 font-medium hover:bg-red-500/20 transition-colors flex items-center justify-center gap-2"
+                    style={{ fontFamily: "var(--font-inter)", fontSize: "14px", letterSpacing: "-0.14px", lineHeight: "1.0" }}
+                >
+                    <LogOut className="w-5 h-5" />
+                    Log out
+                </button>
+            </div>
         </div>
     );
 }
