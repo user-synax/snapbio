@@ -142,7 +142,7 @@ export default function BillingClient({ user, subscription }) {
           Redeem a Promo Code
         </h2>
 
-        <form onSubmit={handleRedeem} className="flex gap-3">
+        <form onSubmit={handleRedeem} className="flex flex-col md:flex-row gap-3">
           <input
             type="text"
             value={promoCode}
@@ -159,7 +159,7 @@ export default function BillingClient({ user, subscription }) {
           <button
             type="submit"
             disabled={isRedeeming || !promoCode.trim()}
-            className="px-6 py-3 rounded-full bg-white text-black font-medium hover:bg-white/90 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center gap-2"
+            className="px-6 py-3 rounded-full bg-white text-black font-medium hover:bg-white/90 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2 md:w-auto w-full"
             style={{
               fontFamily: "var(--font-inter)",
               fontSize: "14px",
