@@ -24,6 +24,7 @@ export async function middleware(request) {
 
   const isProtectedPath = path === "/dashboard" || path.startsWith("/dashboard/");
   const isOnboardingPath = path === "/onboarding";
+  const isHomePath = path === "/";
 
   if (isProtectedPath && !session) {
     const redirectUrl = new URL("/", request.nextUrl);
@@ -33,6 +34,11 @@ export async function middleware(request) {
   if (session) {
     // Since we stored username in JWT during sign-in, check from session
     const hasUsername = session.user?.username;
+
+    if (hasUsername && isHomePath) {
+      const redirectUrl = new URL("/dashboard", request.nextUrl);
+      return NextResponse.redirect(redirectUrl);
+    }
 
     if (!hasUsername && !isOnboardingPath && !path.startsWith("/api/")) {
       const redirectUrl = new URL("/onboarding", request.nextUrl);
