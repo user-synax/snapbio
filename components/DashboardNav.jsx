@@ -77,8 +77,8 @@ function NavLink({ item, pathname, isMobile, isPro }) {
                 href={item.href}
                 className={`
           ${isMobile ? "flex flex-col items-center gap-1 py-1 px-3" : "flex items-center gap-3 px-4 py-3 rounded-full"}
-          ${isActive ? "bg-[#1c1c1c] text-white" : "text-[#999999] hover:text-white hover:bg-[#141414]"}
-          transition-colors
+          ${isActive ? "text-white bg-[#0099ff]" : "text-[#999999] hover:text-white px-4 py-3 hover:bg-[#141414]"}
+          transition-colors duration-300 
         `}
             >
                 <item.icon className={isMobile ? "w-5 h-5" : "w-5 h-5"} />
@@ -96,7 +96,7 @@ function NavLink({ item, pathname, isMobile, isPro }) {
             {item.pro && !isPro && (
                 <div className="absolute left-full ml-2 top-1/2 -translate-y-1/2 hidden group-hover:block">
                     <div className="bg-[#141414] border border-[#262626] rounded-[10px] px-3 py-2 text-xs text-white whitespace-nowrap z-50" style={{ fontFamily: "var(--font-inter)", fontSize: "12px", fontWeight: "400", letterSpacing: "-0.12px", lineHeight: "1.20" }}>
-                        Analytics is a Pro feature
+                        {item.label} is a Pro feature
                     </div>
                 </div>
             )}
