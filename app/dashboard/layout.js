@@ -7,6 +7,7 @@ import { Toaster } from "../../components/ui/sonner";
 import { DesktopNav, MobileNav } from "../../components/DashboardNav";
 import { getRandomEmoji, getAvatarBgColor } from "../../lib/avatar";
 import { Plus_Jakarta_Sans } from "next/font/google";
+import LogoutButton from "./LogoutButton";
 
 const plusJakarta = Plus_Jakarta_Sans({ subsets: ["latin"] });
 
@@ -37,7 +38,7 @@ export default async function DashboardLayout({ children }) {
         <DesktopNav isPro={user.isPro} isAdmin={isAdmin} />
 
         {/* Sidebar footer */}
-        <div className="p-4 border-t border-[#262626] mt-auto">
+        <div className="p-4 border-t border-[#262626] mt-auto space-y-3">
           <div className="flex items-center gap-3">
             {user.avatarUrl || user.image ? (
               <img
@@ -62,6 +63,7 @@ export default async function DashboardLayout({ children }) {
               </p>
             </div>
           </div>
+          <LogoutButton />
         </div>
       </aside>
 
