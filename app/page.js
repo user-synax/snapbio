@@ -27,7 +27,7 @@ export default function Home() {
                     <div className="flex items-center gap-3">
                         <Link
                             href="/auth/signin"
-                            className="px-5 py-2 rounded-full bg-[#13131A] border border-[#2A2A35] text-sm font-medium hover:bg-[#1A1A22] transition-colors"
+                            className="hidden md:inline-flex px-5 py-2 rounded-full bg-[#13131A] border border-[#2A2A35] text-sm font-medium hover:bg-[#1A1A22] transition-colors"
                         >
                             Sign in
                         </Link>
@@ -611,7 +611,7 @@ export default function Home() {
                     </Link>
                     <div className="flex flex-wrap items-center justify-center gap-6">
                         <Link
-                            href="https://github.com/usersynax/snapbio"
+                            href="https://github.com/user-synax/snapbio"
                             className="text-sm text-[#94A3B8] hover:text-white transition-colors"
                         >
                             GitHub
@@ -621,7 +621,7 @@ export default function Home() {
                             className="text-sm text-[#94A3B8] hover:text-white transition-colors"
                         >
                             Privacy
-                        </Link>
+                        </Link>v
                         <Link
                             href="/terms"
                             className="text-sm text-[#94A3B8] hover:text-white transition-colors"
