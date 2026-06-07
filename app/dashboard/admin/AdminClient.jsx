@@ -3,7 +3,7 @@
 
 import { useState, useEffect } from "react";
 import { Plus_Jakarta_Sans, Inter } from "next/font/google";
-import { Shield, Users, Gift, Check, Copy, Loader2 } from "lucide-react";
+import { Shield, Users, Gift, Check, Copy, Loader2, Plus, Trash2, CalendarPlus, Clock } from "lucide-react";
 import { toast } from "sonner";
 
 const plusJakarta = Plus_Jakarta_Sans({ subsets: ["latin"] });
@@ -16,6 +16,7 @@ export default function AdminClient() {
   const [loading, setLoading] = useState(true);
   const [creating, setCreating] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState("monthly");
+  const [processingUser, setProcessingUser] = useState(null);
 
   const fetchData = async () => {
     try {
@@ -69,6 +70,30 @@ export default function AdminClient() {
     }
   };
 
+  const handleSubscriptionAction = async (userId, action, days = 30) => {
+    try {
+      setProcessingUser(userId);
+      const response = await fetch("/api/admin/users", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userId, action, days, plan: "monthly" }),
+      });
+
+      if (response.ok) {
+        const msg = action === "grant_pro" ? "Pro granted successfully" : action === "extend" ? "Subscription extended successfully" : "Subscription canceled successfully";
+        toast.success(msg);
+        fetchData();
+      } else {
+        toast.error("Action failed");
+      }
+    } catch (error) {
+      console.error("Error updating subscription:", error);
+      toast.error("Action failed");
+    } finally {
+      setProcessingUser(null);
+    }
+  };
+
   const copyToClipboard = async (text) => {
     try {
       await navigator.clipboard.writeText(text);
@@ -77,6 +102,10 @@ export default function AdminClient() {
       console.error("Failed to copy:", error);
       toast.error("Failed to copy");
     }
+  };
+
+  const getActiveSubscription = (subscriptions) => {
+    return subscriptions?.find((sub) => sub.status === "active");
   };
 
   return (
@@ -97,7 +126,7 @@ export default function AdminClient() {
             lineHeight: "1.30",
           }}
         >
-          Manage users and promo codes.
+          Manage users, promo codes, and subscriptions.
         </p>
       </div>
 
@@ -406,18 +435,7 @@ export default function AdminClient() {
                         lineHeight: "1.30",
                       }}
                     >
-                      Username
-                    </th>
-                    <th
-                      className="text-left py-3 px-2 text-[#999999] font-medium"
-                      style={{
-                        fontFamily: "var(--font-inter)",
-                        fontSize: "13px",
-                        letterSpacing: "-0.13px",
-                        lineHeight: "1.30",
-                      }}
-                    >
-                      Status
+                      Subscription
                     </th>
                     <th
                       className="text-left py-3 px-2 text-[#999999] font-medium"
@@ -430,87 +448,160 @@ export default function AdminClient() {
                     >
                       Joined
                     </th>
+                    <th
+                      className="text-left py-3 px-2 text-[#999999] font-medium"
+                      style={{
+                        fontFamily: "var(--font-inter)",
+                        fontSize: "13px",
+                        letterSpacing: "-0.13px",
+                        lineHeight: "1.30",
+                      }}
+                    >
+                      Actions
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
-                  {users.map((user) => (
-                    <tr key={user._id} className="border-b border-[#262626]">
-                      <td
-                        className="py-4 px-2 text-white"
-                        style={{
-                          fontFamily: "var(--font-inter)",
-                          fontSize: "14px",
-                          letterSpacing: "-0.14px",
-                          lineHeight: "1.40",
-                        }}
-                      >
-                        {user.name}
-                      </td>
-                      <td
-                        className="py-4 px-2 text-[#999999]"
-                        style={{
-                          fontFamily: "var(--font-inter)",
-                          fontSize: "14px",
-                          letterSpacing: "-0.14px",
-                          lineHeight: "1.40",
-                        }}
-                      >
-                        {user.email}
-                      </td>
-                      <td
-                        className="py-4 px-2 text-[#999999]"
-                        style={{
-                          fontFamily: "var(--font-inter)",
-                          fontSize: "14px",
-                          letterSpacing: "-0.14px",
-                          lineHeight: "1.40",
-                        }}
-                      >
-                        @{user.username || "-"}
-                      </td>
-                      <td className="py-4 px-2">
-                        {user.isPro ? (
-                          <span className="text-[#22c55e] flex items-center gap-1">
-                            <Check className="w-4 h-4" />
-                            <span
-                              style={{
-                                fontFamily: "var(--font-inter)",
-                                fontSize: "14px",
-                                letterSpacing: "-0.14px",
-                                lineHeight: "1.40",
-                              }}
-                            >
-                              Pro
+                  {users.map((user) => {
+                    const activeSub = getActiveSubscription(user.subscriptions);
+                    return (
+                      <tr key={user._id} className="border-b border-[#262626]">
+                        <td
+                          className="py-4 px-2 text-white"
+                          style={{
+                            fontFamily: "var(--font-inter)",
+                            fontSize: "14px",
+                            letterSpacing: "-0.14px",
+                            lineHeight: "1.40",
+                          }}
+                        >
+                          {user.name}
+                        </td>
+                        <td
+                          className="py-4 px-2 text-[#999999]"
+                          style={{
+                            fontFamily: "var(--font-inter)",
+                            fontSize: "14px",
+                            letterSpacing: "-0.14px",
+                            lineHeight: "1.40",
+                          }}
+                        >
+                          {user.email}
+                        </td>
+                        <td className="py-4 px-2">
+                          {user.isPro ? (
+                            <div className="space-y-1">
+                              <span className="text-[#22c55e] flex items-center gap-1">
+                                <Check className="w-4 h-4" />
+                                <span
+                                  style={{
+                                    fontFamily: "var(--font-inter)",
+                                    fontSize: "14px",
+                                    letterSpacing: "-0.14px",
+                                    lineHeight: "1.40",
+                                  }}
+                                >
+                                  Pro
+                                </span>
+                              </span>
+                              {activeSub && (
+                                <span
+                                  className="text-[#999999] block text-xs"
+                                  style={{
+                                    fontFamily: "var(--font-inter)",
+                                  }}
+                                >
+                                  Expires {new Date(activeSub.endDate).toLocaleDateString()}
+                                </span>
+                              )}
+                            </div>
+                          ) : (
+                            <span className="text-[#999999] flex items-center gap-1">
+                              <span
+                                style={{
+                                  fontFamily: "var(--font-inter)",
+                                  fontSize: "14px",
+                                  letterSpacing: "-0.14px",
+                                  lineHeight: "1.40",
+                                }}
+                              >
+                                Free
+                              </span>
                             </span>
-                          </span>
-                        ) : (
-                          <span className="text-[#999999] flex items-center gap-1">
-                            <span
-                              style={{
-                                fontFamily: "var(--font-inter)",
-                                fontSize: "14px",
-                                letterSpacing: "-0.14px",
-                                lineHeight: "1.40",
-                              }}
-                            >
-                              Free
-                            </span>
-                          </span>
-                        )}
-                      </td>
-                      <td
-                        className="py-4 px-2 text-[#999999]"
-                        style={{
-                          fontFamily: "var(--font-inter)",
-                          fontSize: "14px",
-                          letterSpacing: "-0.14px",
-                          lineHeight: "1.40",
-                        }}
-                      >
-                        {new Date(user.createdAt).toLocaleDateString()}
-                      </td>
-                    </tr>
-                  ))}
+                          )}
+                        </td>
+                        <td
+                          className="py-4 px-2 text-[#999999]"
+                          style={{
+                            fontFamily: "var(--font-inter)",
+                            fontSize: "14px",
+                            letterSpacing: "-0.14px",
+                            lineHeight: "1.40",
+                          }}
+                        >
+                          {new Date(user.createdAt).toLocaleDateString()}
+                        </td>
+                        <td className="py-4 px-2">
+                          <div className="flex flex-wrap gap-2">
+                            {!user.isPro && (
+                              <button
+                                onClick={() => handleSubscriptionAction(user._id, "grant_pro", 30)}
+                                disabled={processingUser === user._id}
+                                className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-[#22c55e] text-black font-medium hover:bg-[#22c55e]/90 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                                style={{
+                                  fontFamily: "var(--font-inter)",
+                                  fontSize: "12px",
+                                }}
+                              >
+                                {processingUser === user._id ? (
+                                  <Loader2 className="w-3 h-3 animate-spin" />
+                                ) : (
+                                  <Plus className="w-3 h-3" />
+                                )}
+                                Grant Pro
+                              </button>
+                            )}
+                            {user.isPro && (
+                              <>
+                                <button
+                                  onClick={() => handleSubscriptionAction(user._id, "extend", 30)}
+                                  disabled={processingUser === user._id}
+                                  className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-[#3b82f6] text-white font-medium hover:bg-[#3b82f6]/90 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                                  style={{
+                                    fontFamily: "var(--font-inter)",
+                                    fontSize: "12px",
+                                  }}
+                                >
+                                  {processingUser === user._id ? (
+                                    <Loader2 className="w-3 h-3 animate-spin" />
+                                  ) : (
+                                    <CalendarPlus className="w-3 h-3" />
+                                  )}
+                                  +30 Days
+                                </button>
+                                <button
+                                  onClick={() => handleSubscriptionAction(user._id, "cancel")}
+                                  disabled={processingUser === user._id}
+                                  className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-[#ef4444] text-white font-medium hover:bg-[#ef4444]/90 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                                  style={{
+                                    fontFamily: "var(--font-inter)",
+                                    fontSize: "12px",
+                                  }}
+                                >
+                                  {processingUser === user._id ? (
+                                    <Loader2 className="w-3 h-3 animate-spin" />
+                                  ) : (
+                                    <Trash2 className="w-3 h-3" />
+                                  )}
+                                  Cancel
+                                </button>
+                              </>
+                            )}
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })}
                 </tbody>
               </table>
             </div>

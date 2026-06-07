@@ -5,6 +5,7 @@ import Credentials from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
 import { connectToDatabase } from "./lib/db";
 import User from "./models/User";
+import Subscription from "./models/Subscription";
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   providers: [
@@ -76,6 +77,24 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         await connectToDatabase();
         const dbUser = await User.findOne({ email: user?.email || token.email });
         if (dbUser) {
+          // Check for expired subscriptions
+          const activeSubscription = await Subscription.findOne({
+            userId: dbUser._id,
+            status: "active",
+          });
+
+          if (activeSubscription && new Date(activeSubscription.endDate) < new Date()) {
+            // Subscription expired, update status, reset isPro and theme
+            await Subscription.findByIdAndUpdate(activeSubscription._id, {
+              status: "expired" });
+            await User.findByIdAndUpdate(dbUser._id, {
+              isPro: false,
+              theme: "warm-sand",
+            });
+            // Refresh user
+            dbUser.isPro = false;
+          }
+
           token.id = dbUser._id.toString();
           token.username = dbUser.username;
           token.isPro = dbUser.isPro;

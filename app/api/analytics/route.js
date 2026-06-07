@@ -5,6 +5,7 @@ import { connectToDatabase } from "../../../lib/db";
 import User from "../../../models/User";
 import Click from "../../../models/Click";
 import Link from "../../../models/Link";
+import ProfileView from "../../../models/ProfileView";
 
 export const runtime = "nodejs";
 
@@ -102,10 +103,47 @@ export async function GET(request) {
     { $project: { country: "$_id", count: "$count", _id: 0 } },
   ]);
 
+  // Profile views queries
+  const totalViews = await ProfileView.countDocuments({ userId: user._id });
+
+  const viewsFilter = {
+    userId: user._id,
+    timestamp: { $gte: startDate },
+  };
+
+  const viewsByDay = await ProfileView.aggregate([
+    { $match: viewsFilter },
+    {
+      $group: {
+        _id: {
+          $dateToString: { format: "%Y-%m-%d", date: "$timestamp" },
+        },
+        count: { $sum: 1 },
+      },
+    },
+    { $sort: { _id: 1 } },
+    { $project: { date: "$_id", count: "$count", _id: 0 } },
+  ]);
+
+  const viewsByCountry = await ProfileView.aggregate([
+    { $match: viewsFilter },
+    {
+      $group: {
+        _id: "$country",
+        count: { $sum: 1 },
+      },
+    },
+    { $sort: { count: -1 } },
+    { $project: { country: "$_id", count: "$count", _id: 0 } },
+  ]);
+
   return NextResponse.json({
     totalClicks,
     clicksByDay,
     topLinks,
     clicksByCountry,
+    totalViews,
+    viewsByDay,
+    viewsByCountry,
   });
 }

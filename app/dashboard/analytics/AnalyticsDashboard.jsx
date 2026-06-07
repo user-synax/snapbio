@@ -17,12 +17,14 @@ import { Plus_Jakarta_Sans, Inter } from "next/font/google";
 const plusJakarta = Plus_Jakarta_Sans({ subsets: ["latin"] });
 const inter = Inter({ subsets: ["latin"] });
 
-const CustomTooltip = ({ active, payload, label }) => {
+const CustomTooltip = ({ active, payload, label, type }) => {
     if (active && payload && payload.length) {
         return (
             <div className="bg-[#141414] border border-[#262626] rounded-[10px] p-3 shadow-lg">
                 <p className="text-white" style={{ fontFamily: "var(--font-inter)", fontSize: "14px", fontWeight: "500", letterSpacing: "-0.14px", lineHeight: "1.40" }}>{label}</p>
-                <p className="text-[#0099ff]" style={{ fontFamily: "var(--font-inter)", fontSize: "14px", fontWeight: "500", letterSpacing: "-0.14px", lineHeight: "1.40" }}>{payload[0].value} clicks</p>
+                <p className="text-[#0099ff]" style={{ fontFamily: "var(--font-inter)", fontSize: "14px", fontWeight: "500", letterSpacing: "-0.14px", lineHeight: "1.40" }}>
+                    {payload[0].value} {type === "views" ? "views" : "clicks"}
+                </p>
             </div>
         );
     }
@@ -110,13 +112,22 @@ export default function AnalyticsDashboard() {
                 </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-5">
                 <div className="bg-[#141414] border border-[#262626] rounded-[20px] p-6">
                     <p className="text-[#999999] mb-2" style={{ fontFamily: "var(--font-inter)", fontSize: "14px", fontWeight: "500", letterSpacing: "-0.14px", lineHeight: "1.40" }}>
                         Total Clicks
                     </p>
                     <p className={`${plusJakarta.className} text-3xl font-bold text-white`} style={{ letterSpacing: "-1.0px" }}>
                         {data?.totalClicks || 0}
+                    </p>
+                </div>
+
+                <div className="bg-[#141414] border border-[#262626] rounded-[20px] p-6">
+                    <p className="text-[#999999] mb-2" style={{ fontFamily: "var(--font-inter)", fontSize: "14px", fontWeight: "500", letterSpacing: "-0.14px", lineHeight: "1.40" }}>
+                        Total Views
+                    </p>
+                    <p className={`${plusJakarta.className} text-3xl font-bold text-white`} style={{ letterSpacing: "-1.0px" }}>
+                        {data?.totalViews || 0}
                     </p>
                 </div>
 
@@ -134,13 +145,13 @@ export default function AnalyticsDashboard() {
 
                 <div className="bg-[#141414] border border-[#262626] rounded-[20px] p-6">
                     <p className="text-[#999999] mb-2" style={{ fontFamily: "var(--font-inter)", fontSize: "14px", fontWeight: "500", letterSpacing: "-0.14px", lineHeight: "1.40" }}>
-                        Top Country
+                        Top View Country
                     </p>
                     <p className="text-lg font-bold text-white" style={{ fontFamily: "var(--font-inter)", fontSize: "18px", letterSpacing: "-0.18px", lineHeight: "1.30" }}>
-                        {topCountry?.country || "-"}
+                        {data?.viewsByCountry?.[0]?.country || "-"}
                     </p>
                     <p className="text-[#999999]" style={{ fontFamily: "var(--font-inter)", fontSize: "14px", fontWeight: "500", letterSpacing: "-0.14px", lineHeight: "1.40" }}>
-                        {topCountry ? `${topCountry.count} clicks` : "-"}
+                        {data?.viewsByCountry?.[0] ? `${data.viewsByCountry[0].count} views` : "-"}
                     </p>
                 </div>
             </div>
@@ -151,41 +162,90 @@ export default function AnalyticsDashboard() {
                         Clicks Over Time
                     </h2>
                     <div className="h-64">
-                        <ResponsiveContainer width="100%" height="100%">
-                            <LineChart data={data?.clicksByDay || []}>
-                                <XAxis
-                                    dataKey="date"
-                                    stroke="#999999"
-                                    tick={{ fontSize: 12, fontFamily: "var(--font-inter)" }}
-                                    axisLine={false}
-                                    tickLine={false}
-                                />
-                                <YAxis
-                                    stroke="#999999"
-                                    tick={{ fontSize: 12, fontFamily: "var(--font-inter)" }}
-                                    axisLine={false}
-                                    tickLine={false}
-                                    width={30}
-                                />
-                                <Tooltip content={<CustomTooltip />} />
-                                <Line
-                                    type="monotone"
-                                    dataKey="count"
-                                    stroke="#6a4cf5"
-                                    strokeWidth={3}
-                                    dot={{ r: 4, fill: "#6a4cf5" }}
-                                    activeDot={{ r: 6 }}
-                                />
-                            </LineChart>
-                        </ResponsiveContainer>
+                        {data?.clicksByDay?.length > 0 ? (
+                            <ResponsiveContainer width="100%" height="100%">
+                                <LineChart data={data?.clicksByDay || []}>
+                                    <XAxis
+                                        dataKey="date"
+                                        stroke="#999999"
+                                        tick={{ fontSize: 12, fontFamily: "var(--font-inter)" }}
+                                        axisLine={false}
+                                        tickLine={false}
+                                    />
+                                    <YAxis
+                                        stroke="#999999"
+                                        tick={{ fontSize: 12, fontFamily: "var(--font-inter)" }}
+                                        axisLine={false}
+                                        tickLine={false}
+                                        width={30}
+                                    />
+                                    <Tooltip content={<CustomTooltip />} />
+                                    <Line
+                                        type="monotone"
+                                        dataKey="count"
+                                        stroke="#6a4cf5"
+                                        strokeWidth={3}
+                                        dot={{ r: 4, fill: "#6a4cf5" }}
+                                        activeDot={{ r: 6 }}
+                                    />
+                                </LineChart>
+                            </ResponsiveContainer>
+                        ) : (
+                            <div className="flex items-center justify-center h-full text-[#999999]" style={{ fontFamily: "var(--font-inter)" }}>
+                                Waiting for data...
+                            </div>
+                        )}
                     </div>
                 </div>
 
                 <div className="bg-[#141414] border border-[#262626] rounded-[20px] p-6">
                     <h2 className={`${plusJakarta.className} text-xl font-bold text-white mb-4`} style={{ letterSpacing: "-1.0px" }}>
-                        Top Links
+                        Profile Views Over Time
                     </h2>
                     <div className="h-64">
+                        {data?.viewsByDay?.length > 0 ? (
+                            <ResponsiveContainer width="100%" height="100%">
+                                <LineChart data={data?.viewsByDay || []}>
+                                    <XAxis
+                                        dataKey="date"
+                                        stroke="#999999"
+                                        tick={{ fontSize: 12, fontFamily: "var(--font-inter)" }}
+                                        axisLine={false}
+                                        tickLine={false}
+                                    />
+                                    <YAxis
+                                        stroke="#999999"
+                                        tick={{ fontSize: 12, fontFamily: "var(--font-inter)" }}
+                                        axisLine={false}
+                                        tickLine={false}
+                                        width={30}
+                                    />
+                                    <Tooltip content={(props) => <CustomTooltip {...props} type="views" />} />
+                                    <Line
+                                        type="monotone"
+                                        dataKey="count"
+                                        stroke="#d44df0"
+                                        strokeWidth={3}
+                                        dot={{ r: 4, fill: "#d44df0" }}
+                                        activeDot={{ r: 6 }}
+                                    />
+                                </LineChart>
+                            </ResponsiveContainer>
+                        ) : (
+                            <div className="flex items-center justify-center h-full text-[#999999]" style={{ fontFamily: "var(--font-inter)" }}>
+                                Waiting for data...
+                            </div>
+                        )}
+                    </div>
+                </div>
+            </div>
+
+            <div className="bg-[#141414] border border-[#262626] rounded-[20px] p-6">
+                <h2 className={`${plusJakarta.className} text-xl font-bold text-white mb-4`} style={{ letterSpacing: "-1.0px" }}>
+                    Top Links
+                </h2>
+                <div className="h-64">
+                    {data?.topLinks?.length > 0 ? (
                         <ResponsiveContainer width="100%" height="100%">
                             <BarChart
                                 data={data?.topLinks || []}
@@ -227,42 +287,95 @@ export default function AnalyticsDashboard() {
                                 </Bar>
                             </BarChart>
                         </ResponsiveContainer>
-                    </div>
+                    ) : (
+                        <div className="flex items-center justify-center h-full text-[#999999]" style={{ fontFamily: "var(--font-inter)" }}>
+                            Waiting for data...
+                        </div>
+                    )}
                 </div>
             </div>
 
-            <div className="bg-[#141414] border border-[#262626] rounded-[20px] p-6">
-                <h2 className={`${plusJakarta.className} text-xl font-bold text-white mb-4`} style={{ letterSpacing: "-1.0px" }}>
-                    Clicks by Country
-                </h2>
-                <div className="overflow-x-auto">
-                    <table className="w-full text-left border-collapse">
-                        <thead>
-                            <tr className="border-b border-[#262626]">
-                                <th className="py-3 px-4 text-[#999999]" style={{ fontFamily: "var(--font-inter)", fontSize: "14px", fontWeight: "500", letterSpacing: "-0.14px", lineHeight: "1.40" }}>
-                                    Country
-                                </th>
-                                <th className="py-3 px-4 text-[#999999]" style={{ fontFamily: "var(--font-inter)", fontSize: "14px", fontWeight: "500", letterSpacing: "-0.14px", lineHeight: "1.40" }}>
-                                    Clicks
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {data?.clicksByCountry?.map((item, index) => (
-                                <tr
-                                    key={index}
-                                    className="border-b border-[#262626]/50 last:border-0"
-                                >
-                                    <td className="py-3 px-4 text-white" style={{ fontFamily: "var(--font-inter)", fontSize: "14px", letterSpacing: "-0.14px", lineHeight: "1.40" }}>
-                                        {item.country}
-                                    </td>
-                                    <td className="py-3 px-4 text-[#999999]" style={{ fontFamily: "var(--font-inter)", fontSize: "14px", letterSpacing: "-0.14px", lineHeight: "1.40" }}>
-                                        {item.count}
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div className="bg-[#141414] border border-[#262626] rounded-[20px] p-6">
+                    <h2 className={`${plusJakarta.className} text-xl font-bold text-white mb-4`} style={{ letterSpacing: "-1.0px" }}>
+                        Clicks by Country
+                    </h2>
+                    <div className="overflow-x-auto">
+                        {data?.clicksByCountry?.length > 0 ? (
+                            <table className="w-full text-left border-collapse">
+                                <thead>
+                                    <tr className="border-b border-[#262626]">
+                                        <th className="py-3 px-4 text-[#999999]" style={{ fontFamily: "var(--font-inter)", fontSize: "14px", fontWeight: "500", letterSpacing: "-0.14px", lineHeight: "1.40" }}>
+                                            Country
+                                        </th>
+                                        <th className="py-3 px-4 text-[#999999]" style={{ fontFamily: "var(--font-inter)", fontSize: "14px", fontWeight: "500", letterSpacing: "-0.14px", lineHeight: "1.40" }}>
+                                            Clicks
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {data?.clicksByCountry?.map((item, index) => (
+                                        <tr
+                                            key={index}
+                                            className="border-b border-[#262626]/50 last:border-0"
+                                        >
+                                            <td className="py-3 px-4 text-white" style={{ fontFamily: "var(--font-inter)", fontSize: "14px", letterSpacing: "-0.14px", lineHeight: "1.40" }}>
+                                                {item.country}
+                                            </td>
+                                            <td className="py-3 px-4 text-[#999999]" style={{ fontFamily: "var(--font-inter)", fontSize: "14px", letterSpacing: "-0.14px", lineHeight: "1.40" }}>
+                                                {item.count}
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        ) : (
+                            <div className="flex items-center justify-center py-8 text-[#999999]" style={{ fontFamily: "var(--font-inter)" }}>
+                                Waiting for data...
+                            </div>
+                        )}
+                    </div>
+                </div>
+
+                <div className="bg-[#141414] border border-[#262626] rounded-[20px] p-6">
+                    <h2 className={`${plusJakarta.className} text-xl font-bold text-white mb-4`} style={{ letterSpacing: "-1.0px" }}>
+                        Views by Country
+                    </h2>
+                    <div className="overflow-x-auto">
+                        {data?.viewsByCountry?.length > 0 ? (
+                            <table className="w-full text-left border-collapse">
+                                <thead>
+                                    <tr className="border-b border-[#262626]">
+                                        <th className="py-3 px-4 text-[#999999]" style={{ fontFamily: "var(--font-inter)", fontSize: "14px", fontWeight: "500", letterSpacing: "-0.14px", lineHeight: "1.40" }}>
+                                            Country
+                                        </th>
+                                        <th className="py-3 px-4 text-[#999999]" style={{ fontFamily: "var(--font-inter)", fontSize: "14px", fontWeight: "500", letterSpacing: "-0.14px", lineHeight: "1.40" }}>
+                                            Views
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {data?.viewsByCountry?.map((item, index) => (
+                                        <tr
+                                            key={index}
+                                            className="border-b border-[#262626]/50 last:border-0"
+                                        >
+                                            <td className="py-3 px-4 text-white" style={{ fontFamily: "var(--font-inter)", fontSize: "14px", letterSpacing: "-0.14px", lineHeight: "1.40" }}>
+                                                {item.country}
+                                            </td>
+                                            <td className="py-3 px-4 text-[#999999]" style={{ fontFamily: "var(--font-inter)", fontSize: "14px", letterSpacing: "-0.14px", lineHeight: "1.40" }}>
+                                                {item.count}
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        ) : (
+                            <div className="flex items-center justify-center py-8 text-[#999999]" style={{ fontFamily: "var(--font-inter)" }}>
+                                Waiting for data...
+                            </div>
+                        )}
+                    </div>
                 </div>
             </div>
         </div>

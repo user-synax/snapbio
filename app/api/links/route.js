@@ -4,6 +4,7 @@ import { auth } from "../../../auth";
 import { connectToDatabase } from "../../../lib/db";
 import User from "../../../models/User";
 import Link from "../../../models/Link";
+import Activity from "../../../models/Activity";
 
 export const runtime = "nodejs";
 
@@ -38,5 +39,12 @@ export async function POST(request) {
   });
 
   await newLink.save();
+
+  await Activity.create({
+    userId: user._id,
+    type: "link_created",
+    metadata: { linkId: newLink._id, title, url },
+  });
+
   return NextResponse.json(newLink);
 }

@@ -2,6 +2,8 @@
 import { NextResponse } from "next/server";
 import { connectToDatabase } from "../../../lib/db";
 import Click from "../../../models/Click";
+import Activity from "../../../models/Activity";
+import Link from "../../../models/Link";
 
 export const runtime = "nodejs";
 
@@ -14,12 +16,24 @@ export async function POST(request) {
 
   await connectToDatabase();
 
-  await Click.create({
+  const click = await Click.create({
     linkId,
     userId,
     country,
     city,
     referrer,
+  });
+
+  const link = await Link.findById(linkId);
+  await Activity.create({
+    userId,
+    type: "link_clicked",
+    metadata: { 
+      linkId, 
+      title: link?.title || "Unknown", 
+      country, 
+      city 
+    },
   });
 
   return NextResponse.json({ ok: true });

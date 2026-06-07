@@ -7,6 +7,7 @@ import LinkModel from "../../models/Link";
 import { getTheme } from "../../lib/themes";
 import { getRandomEmoji, getAvatarBgColor } from "../../lib/avatar";
 import BioLinks from "../../components/BioLinks";
+import ProfileViewTracker from "../../components/ProfileViewTracker";
 
 export const runtime = "nodejs";
 
@@ -108,6 +109,7 @@ export default async function BioPage({ params }) {
 
     return (
         <html lang="en">
+            <ProfileViewTracker userId={user._id.toString()} />
             <body
                 className={`${inter.className} min-h-screen`}
                 style={{
