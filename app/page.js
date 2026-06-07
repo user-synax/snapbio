@@ -3,6 +3,9 @@ import Link from "next/link";
 import { Plus_Jakarta_Sans, Inter } from "next/font/google";
 import { ArrowRight } from "lucide-react";
 import WaveBackground from "@/components/WaveBackground";
+import HeroButton from "../components/aura/heroButton";
+import PricingCard from "../components/aura/heroPricingCard";
+import Footer from "../components/aura/footer";
 
 const plusJakarta = Plus_Jakarta_Sans({ subsets: ["latin"] });
 const inter = Inter({ subsets: ["latin"] });
@@ -36,7 +39,7 @@ export default function Home() {
                             href="/auth/signup"
                             className="px-5 py-2 rounded-full bg-[#0099ff] text-sm font-semibold hover:opacity-90 transition-opacity"
                         >
-                            Join Now
+                            Create account
                         </Link>
                     </div>
 
@@ -67,9 +70,9 @@ export default function Home() {
                         <div className="flex flex-col sm:flex-row flex-wrap items-center justify-center gap-4">
                             <Link
                                 href="/auth/signin"
-                                className="w-full sm:w-auto px-5 py-2 rounded-full bg-[#0099ff] text-md font-semibold hover:opacity-90 transition-opacity flex items-center justify-center gap-2"
+                                className="w-full sm:w-auto text-md font-semibold flex items-center justify-center gap-2"
                             >
-                                Join Now
+                            <HeroButton />
                             </Link>
                             <Link
                                 href="/demo"
@@ -510,92 +513,19 @@ export default function Home() {
                                     href="/auth/signin"
                                     className="w-full py-3 px-4 rounded-full bg-[#0A0A0F] border border-[#2A2A35] text-center font-semibold hover:bg-[#1A1A22] transition-colors"
                                 >
-                                    Get started
+                                    Start Free
                                 </Link>
                             </div>
 
                             {/* Pro Plan */}
-                            <div className="relative  border-[#0099ff] border-2 overflow-hidden rounded-2xl p-8">
-                                <div
-                                    className="absolute inset-0 opacity-80"
-                                    style={{
-                                        background: "linear-gradient(135deg,#7C3AED_0%,#EC4899_100%)",
-                                    }}
-                                />
-                                <div
-                                    className="absolute inset-0 opacity-50"
-                                    style={{
-                                        background:
-                                            "radial-gradient(circle at center, rgba(255,255,255,0.2) 0%, transparent 70%)",
-                                    }}
-                                />
-                                <div className="relative z-10">
-                                    <div className="mb-6">
-                                        <div className="flex items-center gap-2 mb-2">
-                                            <h3
-                                                className={`${plusJakarta.className} text-2xl font-bold`}
-                                            >
-                                                Pro
-                                            </h3>
-                                            <span className="text-xs px-2 py-0.5 rounded-full bg-white/20 text-white">
-                                                Most popular
-                                            </span>
-                                        </div>
-                                        <p className="text-white/90">
-                                            For serious creators
-                                        </p>
-                                        <div className="mt-4 flex items-baseline gap-1">
-                                            <span
-                                                className={`${plusJakarta.className} text-4xl font-extrabold text-white`}
-                                            >
-                                                $1
-                                            </span>
-                                            <span className="text-white/90">
-                                                /month
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <ul className="space-y-3 mb-8">
-                                        <li className="flex items-center gap-3 text-white/90">
-                                            <div className="w-5 h-5 rounded-full bg-white/20 flex items-center justify-center shrink-0">
-                                                <div className="w-3 h-3 rounded-full bg-white" />
-                                            </div>
-                                            Unlimited links
-                                        </li>
-                                        <li className="flex items-center gap-3 text-white/90">
-                                            <div className="w-5 h-5 rounded-full bg-white/20 flex items-center justify-center shrink-0">
-                                                <div className="w-3 h-3 rounded-full bg-white" />
-                                            </div>
-                                            All themes unlocked
-                                        </li>
-                                        <li className="flex items-center gap-3 text-white/90">
-                                            <div className="w-5 h-5 rounded-full bg-white/20 flex items-center justify-center shrink-0">
-                                                <div className="w-3 h-3 rounded-full bg-white" />
-                                            </div>
-                                            Click analytics
-                                        </li>
-                                        <li className="flex items-center gap-3 text-white/90">
-                                            <div className="w-5 h-5 rounded-full bg-white/20 flex items-center justify-center shrink-0">
-                                                <div className="w-3 h-3 rounded-full bg-white" />
-                                            </div>
-                                            Advanced customization
-                                        </li>
-                                    </ul>
-                                    <Link
-                                        href="/dashboard/billing"
-                                        className="w-full py-3 px-4 rounded-full bg-white text-violet-700 text-center font-semibold hover:bg-white/90 transition-colors"
-                                    >
-                                        Upgrade to Pro
-                                    </Link>
-                                </div>
-                            </div>
+                            <PricingCard />
                         </div>
                     </div>
                 </section>
             </main>
 
             {/* Footer */}
-            <footer className="bg-[#0A0A0F] border-t border-[#2A2A35] py-8 px-6">
+            {/* <footer className="bg-[#0A0A0F] border-t border-[#2A2A35] py-8 px-6">
                 <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
                     <Link href="/" className="flex items-center gap-2">
                         <img
@@ -633,7 +563,9 @@ export default function Home() {
                         Built by usersynax.dev
                     </p>
                 </div>
-            </footer>
+            </footer> */}
+
+            <Footer />
         </body>
     );
 }
