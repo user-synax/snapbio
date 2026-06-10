@@ -6,6 +6,36 @@ import ThemeButton from "../../components/ThemeButton";
 const plusJakarta = Plus_Jakarta_Sans({ subsets: ["latin"] });
 const inter = Inter({ subsets: ["latin"] });
 
+export const metadata = {
+  title: "Snapbio Demo | Preview a link-in-bio profile page",
+  description:
+    "See a live Snapbio demo of a link-in-bio page with social links, brand styling, and a clean mobile-first layout.",
+  keywords: ["Snapbio demo", "link in bio demo", "bio page preview", "social landing page demo"],
+  openGraph: {
+    title: "Snapbio Demo | Preview a link-in-bio profile page",
+    description:
+      "See a live Snapbio demo of a link-in-bio page with social links, brand styling, and a clean mobile-first layout.",
+    url: "/demo",
+    type: "website",
+    images: [
+      {
+        url: "/link-icon-hig-res.png",
+        alt: "Snapbio demo profile page",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Snapbio Demo | Preview a link-in-bio profile page",
+    description:
+      "See a live Snapbio demo of a link-in-bio page with social links, brand styling, and a clean mobile-first layout.",
+    images: ["/link-icon-hig-res.png"],
+  },
+  alternates: {
+    canonical: "/demo",
+  },
+};
+
 export default function DemoPage() {
   const theme = {
     bgPattern:
@@ -41,14 +71,13 @@ export default function DemoPage() {
   ];
 
   return (
-    <html lang="en">
-      <body
-        className={`${inter.className} min-h-screen overflow-x-hidden`}
-        style={{
-          background: theme.bgGradient,
-          color: theme.textColor,
-        }}
-      >
+    <div
+      className={`${inter.className} min-h-screen overflow-x-hidden`}
+      style={{
+        background: theme.bgGradient,
+        color: theme.textColor,
+      }}
+    >
         {/* Pattern Layer */}
         <div
           className="fixed inset-0 opacity-50 pointer-events-none"
@@ -170,7 +199,6 @@ export default function DemoPage() {
             </div>
           </div>
         </main>
-      </body>
-    </html>
+    </div>
   );
 }

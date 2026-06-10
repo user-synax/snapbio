@@ -13,15 +13,18 @@ export const runtime = "nodejs";
 
 const plusJakarta = Plus_Jakarta_Sans({ subsets: ["latin"] });
 const inter = Inter({ subsets: ["latin"] });
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://snapbio.usersynax.dev";
 
 export async function generateMetadata({ params }) {
-    const { username } = await params;
+    const { username } = params;
     await connectToDatabase();
     const user = await User.findOne({ username });
 
     if (!user) {
         return {
             title: "404 Not Found | Snapbio",
+            description: "The requested Snapbio profile could not be found.",
+            keywords: ["Snapbio 404", "profile not found", "bio page missing"],
             icons: {
                 icon: [
                     { url: "/favicon.ico" },
@@ -46,12 +49,41 @@ export async function generateMetadata({ params }) {
                     },
                 ],
             },
+            openGraph: {
+                title: "404 Not Found | Snapbio",
+                description: "The requested Snapbio profile could not be found.",
+                url: `${siteUrl}/${username}`,
+                type: "website",
+                images: [
+                    {
+                        url: "/link-icon-hig-res.png",
+                        alt: "Snapbio profile not found",
+                    },
+                ],
+            },
+            twitter: {
+                card: "summary_large_image",
+                title: "404 Not Found | Snapbio",
+                description: "The requested Snapbio profile could not be found.",
+                images: ["/link-icon-hig-res.png"],
+            },
+            alternates: {
+                canonical: `/${username}`,
+            },
         };
     }
 
     return {
         title: `@${user.username} | Snapbio`,
-        description: user.bio || "",
+        description:
+            user.bio || `Link page for @${user.username} on Snapbio.`,
+        keywords: [
+            `@${user.username}`,
+            "bio link",
+            "social landing page",
+            "link in bio",
+            "Snapbio",
+        ],
         icons: {
             icon: [
                 { url: "/favicon.ico" },
@@ -78,13 +110,33 @@ export async function generateMetadata({ params }) {
         },
         openGraph: {
             title: `@${user.username} | Snapbio`,
-            description: user.bio || "No bio available.",
+            description:
+                user.bio || `Link page for @${user.username} on Snapbio.`,
+            url: `${siteUrl}/${user.username}`,
+            type: "profile",
+            siteName: "Snapbio",
+            images: [
+                {
+                    url: "/link-icon-hig-res.png",
+                    alt: `@${user.username} on Snapbio`,
+                },
+            ],
+        },
+        twitter: {
+            card: "summary_large_image",
+            title: `@${user.username} | Snapbio`,
+            description:
+                user.bio || `Link page for @${user.username} on Snapbio.`,
+            images: ["/link-icon-hig-res.png"],
+        },
+        alternates: {
+            canonical: `/${user.username}`,
         },
     };
 }
 
 export default async function BioPage({ params }) {
-    const { username } = await params;
+    const { username } = params;
     await connectToDatabase();
     const user = await User.findOne({ username });
 
@@ -108,16 +160,16 @@ export default async function BioPage({ params }) {
     }));
 
     return (
-        <html lang="en">
+        <>
             <ProfileViewTracker userId={user._id.toString()} />
-            <body
+            <main
                 className={`${inter.className} min-h-screen`}
                 style={{
                     background: `${theme.bgPattern}, ${theme.bgGradient}`,
                     backgroundSize: `${theme.bgPatternSize}, cover`,
                 }}
             >
-                <main className="max-w-md mx-auto py-16 sm:py-20 px-4 sm:px-6">
+                <div className="max-w-md mx-auto py-16 sm:py-20 px-4 sm:px-6">
                     <div className="text-center space-y-4 rounded-[32px] border backdrop-blur-xl p-8" style={{
                         background: theme.cardColor,
                         borderColor: theme.cardBorder || theme.borderColor,
@@ -209,7 +261,7 @@ export default async function BioPage({ params }) {
                             </p>
                         )}
                     </div>
-                </main>
+                </div>
                 <Link
                     href={
                         process.env.NEXT_PUBLIC_SITE_URL ||
@@ -233,7 +285,7 @@ export default async function BioPage({ params }) {
                     />
                     Get your links page
                 </Link>
-            </body>
-        </html>
+            </main>
+        </>
     );
 }

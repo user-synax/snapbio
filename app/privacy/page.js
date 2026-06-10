@@ -8,6 +8,28 @@ const plusJakarta = Plus_Jakarta_Sans({ subsets: ["latin"] });
 export const metadata = {
     title: "Privacy Policy | Snapbio",
     description: "Snapbio privacy policy for user data, cookies, and account information.",
+    keywords: ["Snapbio privacy", "data protection", "privacy policy", "user data policy"],
+    openGraph: {
+        title: "Privacy Policy | Snapbio",
+        description: "Snapbio privacy policy for user data, cookies, and account information.",
+        url: "/privacy",
+        type: "website",
+        images: [
+            {
+                url: "/link-icon-hig-res.png",
+                alt: "Snapbio Privacy Policy",
+            },
+        ],
+    },
+    twitter: {
+        card: "summary_large_image",
+        title: "Privacy Policy | Snapbio",
+        description: "Snapbio privacy policy for user data, cookies, and account information.",
+        images: ["/link-icon-hig-res.png"],
+    },
+    alternates: {
+        canonical: "/privacy",
+    },
 };
 
 const sections = [

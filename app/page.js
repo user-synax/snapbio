@@ -10,9 +10,46 @@ import Footer from "../components/aura/footer";
 const plusJakarta = Plus_Jakarta_Sans({ subsets: ["latin"] });
 const inter = Inter({ subsets: ["latin"] });
 
+export const metadata = {
+    title: "Snapbio | Create your all-in-one bio link page",
+    description:
+        "Build a beautiful, mobile-friendly Linktree-style bio page with custom branding, links, and social profile integration.",
+    keywords: [
+        "link in bio",
+        "bio page builder",
+        "linktree alternative",
+        "social landing page",
+        "creator page",
+        "digital business card",
+    ],
+    openGraph: {
+        title: "Snapbio | Modern bio page builder",
+        description:
+            "Build a beautiful, mobile-friendly Linktree-style bio page with custom branding, links, and social profile integration.",
+        url: "/",
+        type: "website",
+        images: [
+            {
+                url: "/link-icon-hig-res.png",
+                alt: "Snapbio demo profile page",
+            },
+        ],
+    },
+    twitter: {
+        card: "summary_large_image",
+        title: "Snapbio | Modern bio page builder",
+        description:
+            "Build a beautiful, mobile-friendly Linktree-style bio page with custom branding, links, and social profile integration.",
+        images: ["/link-icon-hig-res.png"],
+    },
+    alternates: {
+        canonical: "/",
+    },
+};
+
 export default function Home() {
     return (
-        <body
+        <div
             className={`${inter.className} bg-[#0A0A0F] text-white min-h-screen`}
         >
             {/* Navbar */}
@@ -72,7 +109,7 @@ export default function Home() {
                                 href="/auth/signin"
                                 className="w-full sm:w-auto text-md font-semibold flex items-center justify-center gap-2"
                             >
-                            <HeroButton />
+                                <HeroButton />
                             </Link>
                             <Link
                                 href="/demo"
@@ -226,7 +263,7 @@ export default function Home() {
                         <div className="grid grid-cols-1 md:grid-cols-6 gap-5">
 
                             {/* Large Builder Card */}
-                            <div className="md:col-span-4 bg-[#141414] rounded-[30px] p-8 min-h-[320px] flex flex-col justify-between">
+                            <div className="md:col-span-4 bg-[#141414] rounded-[30px] p-8 min-h-80 flex flex-col justify-between">
                                 <div>
                                     <span className="text-[#999999] text-sm">
                                         Build
@@ -246,7 +283,7 @@ export default function Home() {
 
                             {/* Gradient Card */}
                             <div
-                                className="md:col-span-2 rounded-[30px] p-8 min-h-[320px] text-white flex flex-col justify-between"
+                                className="md:col-span-2 rounded-[30px] p-8 min-h-80 text-white flex flex-col justify-between"
                                 style={{
                                     background:
                                         "linear-gradient(135deg,#6a4cf5 0%,#d44df0 100%)",
@@ -270,7 +307,7 @@ export default function Home() {
                             </div>
 
                             {/* Analytics */}
-                            <div className="md:col-span-2 bg-[#141414] rounded-[30px] p-8 min-h-[260px]">
+                            <div className="md:col-span-2 bg-[#141414] rounded-[30px] p-8 min-h-65">
                                 <div className="flex items-center gap-2 mb-4">
                                     <span className="text-[#999999] text-sm">
                                         Analytics
@@ -293,7 +330,7 @@ export default function Home() {
                             </div>
 
                             {/* Custom Domains */}
-                            <div className="md:col-span-2 bg-[#141414] rounded-[30px] p-8 min-h-[260px]">
+                            <div className="md:col-span-2 bg-[#141414] rounded-[30px] p-8 min-h-65">
                                 <div className="flex items-center gap-2 mb-4">
                                     <span className="text-[#999999] text-sm">
                                         Branding
@@ -317,7 +354,7 @@ export default function Home() {
 
                             {/* Gradient Spotlight */}
                             <div
-                                className="md:col-span-2 rounded-[30px] p-8 min-h-[260px] text-white"
+                                className="md:col-span-2 rounded-[30px] p-8 min-h-65 text-white"
                                 style={{
                                     background:
                                         "linear-gradient(135deg,#ff7a3d 0%,#ff5577 100%)",
@@ -335,7 +372,7 @@ export default function Home() {
                             </div>
 
                             {/* AI Card */}
-                            <div className="md:col-span-3 bg-[#141414] rounded-[30px] p-8 min-h-[280px]">
+                            <div className="md:col-span-3 bg-[#141414] rounded-[30px] p-8 min-h-70">
                                 <div className="flex items-center gap-2 mb-4">
                                     <span className="text-[#999999] text-sm">
                                         AI
@@ -359,7 +396,7 @@ export default function Home() {
                             </div>
 
                             {/* QR Card */}
-                            <div className="md:col-span-3 bg-[#141414] rounded-[30px] p-8 min-h-[280px]">
+                            <div className="md:col-span-3 bg-[#141414] rounded-[30px] p-8 min-h-70">
                                 <div className="flex items-center gap-2 mb-4">
                                     <span className="text-[#999999] text-sm">
                                         Growth
@@ -426,7 +463,7 @@ export default function Home() {
                             ].map((theme, index) => (
                                 <div
                                     key={index}
-                                    className="min-w-[200px] sm:min-w-[240px] snap-start bg-[#13131A] border border-[#2A2A35] rounded-2xl p-6"
+                                    className="min-w-50 sm:min-w-60 snap-start bg-[#13131A] border border-[#2A2A35] rounded-2xl p-6"
                                 >
                                     <div
                                         className="w-full aspect-video rounded-lg mb-4 relative overflow-hidden"
@@ -566,6 +603,6 @@ export default function Home() {
             </footer> */}
 
             <Footer />
-        </body>
+        </div>
     );
 }

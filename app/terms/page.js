@@ -8,6 +8,28 @@ const plusJakarta = Plus_Jakarta_Sans({ subsets: ["latin"] });
 export const metadata = {
     title: "Terms of Service | Snapbio",
     description: "Snapbio terms of service for account use, content, and acceptable behavior.",
+    keywords: ["Snapbio terms", "terms of service", "link page builder terms", "privacy and terms"],
+    openGraph: {
+        title: "Terms of Service | Snapbio",
+        description: "Snapbio terms of service for account use, content, and acceptable behavior.",
+        url: "/terms",
+        type: "website",
+        images: [
+            {
+                url: "/link-icon-hig-res.png",
+                alt: "Snapbio Terms of Service",
+            },
+        ],
+    },
+    twitter: {
+        card: "summary_large_image",
+        title: "Terms of Service | Snapbio",
+        description: "Snapbio terms of service for account use, content, and acceptable behavior.",
+        images: ["/link-icon-hig-res.png"],
+    },
+    alternates: {
+        canonical: "/terms",
+    },
 };
 
 const sections = [
