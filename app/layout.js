@@ -38,11 +38,11 @@ export const metadata = {
   ],
   authors: [
     {
-      name: "Snapbio",
+      name: "Ayush, India",
       url: "https://snapbio.usersynax.dev",
     },
   ],
-  creator: "Snapbio",
+  creator: "Ayush",
   verification: {
     google: "mtSQQTLUoP5DvYa7RCE6CnrEoUYfmWX0FdkkYzDO8Po",
   },
@@ -59,7 +59,7 @@ export const metadata = {
   },
   openGraph: {
     type: "website",
-    locale: "en_US",
+    locale: "en_IN",
     url: "/",
     title: "Snapbio | Create a beautiful link-in-bio page",
     description:
@@ -109,9 +109,30 @@ export const metadata = {
 };
 
 export default function RootLayout({ children }) {
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://snapbio.usersynax.dev";
+
   return (
     <html lang="en" className={`${inter.variable} ${plusJakartaSans.variable}`}>
       <body>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Person",
+              name: "Ayush",
+              description:
+                "Ayush is the creator of Snapbio, an India-based Linktree-style bio page builder.",
+              url: siteUrl,
+              jobTitle: "Founder",
+              address: {
+                "@type": "PostalAddress",
+                addressCountry: "India",
+              },
+              sameAs: [siteUrl],
+            }),
+          }}
+        />
         <SessionProvider>{children}</SessionProvider>
       </body>
     </html>
