@@ -13,10 +13,11 @@ export const runtime = "nodejs";
 
 const plusJakarta = Plus_Jakarta_Sans({ subsets: ["latin"] });
 const inter = Inter({ subsets: ["latin"] });
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://snapbio.usersynax.dev";
+const siteUrl =
+    process.env.NEXT_PUBLIC_SITE_URL || "https://snapbio.usersynax.dev";
 
 export async function generateMetadata({ params }) {
-    const { username } = params;
+    const { username } = await params;
     await connectToDatabase();
     const user = await User.findOne({ username });
 
@@ -28,11 +29,23 @@ export async function generateMetadata({ params }) {
             icons: {
                 icon: [
                     { url: "/favicon.ico" },
-                    { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
-                    { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
+                    {
+                        url: "/favicon-16x16.png",
+                        sizes: "16x16",
+                        type: "image/png",
+                    },
+                    {
+                        url: "/favicon-32x32.png",
+                        sizes: "32x32",
+                        type: "image/png",
+                    },
                 ],
                 apple: [
-                    { url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
+                    {
+                        url: "/apple-touch-icon.png",
+                        sizes: "180x180",
+                        type: "image/png",
+                    },
                 ],
                 other: [
                     {
@@ -51,7 +64,8 @@ export async function generateMetadata({ params }) {
             },
             openGraph: {
                 title: "404 Not Found | Snapbio",
-                description: "The requested Snapbio profile could not be found.",
+                description:
+                    "The requested Snapbio profile could not be found.",
                 url: `${siteUrl}/${username}`,
                 type: "website",
                 images: [
@@ -64,7 +78,8 @@ export async function generateMetadata({ params }) {
             twitter: {
                 card: "summary_large_image",
                 title: "404 Not Found | Snapbio",
-                description: "The requested Snapbio profile could not be found.",
+                description:
+                    "The requested Snapbio profile could not be found.",
                 images: ["/link-icon-hig-res.png"],
             },
             alternates: {
@@ -75,8 +90,7 @@ export async function generateMetadata({ params }) {
 
     return {
         title: `@${user.username} | Snapbio`,
-        description:
-            user.bio || `Link page for @${user.username} on Snapbio.`,
+        description: user.bio || `Link page for @${user.username} on Snapbio.`,
         keywords: [
             `@${user.username}`,
             "bio link",
@@ -87,11 +101,23 @@ export async function generateMetadata({ params }) {
         icons: {
             icon: [
                 { url: "/favicon.ico" },
-                { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
-                { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
+                {
+                    url: "/favicon-16x16.png",
+                    sizes: "16x16",
+                    type: "image/png",
+                },
+                {
+                    url: "/favicon-32x32.png",
+                    sizes: "32x32",
+                    type: "image/png",
+                },
             ],
             apple: [
-                { url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
+                {
+                    url: "/apple-touch-icon.png",
+                    sizes: "180x180",
+                    type: "image/png",
+                },
             ],
             other: [
                 {
@@ -136,7 +162,7 @@ export async function generateMetadata({ params }) {
 }
 
 export default async function BioPage({ params }) {
-    const { username } = params;
+    const { username } = await params;
     await connectToDatabase();
     const user = await User.findOne({ username });
 
@@ -150,6 +176,8 @@ export default async function BioPage({ params }) {
     }).sort({ order: 1 });
 
     const theme = getTheme(user.theme);
+    const siteUrl =
+        process.env.NEXT_PUBLIC_SITE_URL || "https://snapbio.usersynax.dev";
 
     // Convert MongoDB document to plain object
     const serializedLinks = links.map((link) => ({
@@ -159,8 +187,25 @@ export default async function BioPage({ params }) {
         icon: link.icon,
     }));
 
+    // Schema.org Person markup
+    const personSchema = {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        name: user.name,
+        description: user.bio || `Link page for @${user.username} on Snapbio`,
+        url: `${siteUrl}/${user.username}`,
+        image: user.avatarUrl || user.image || undefined,
+        sameAs: links.map((link) => link.url).filter((url) => url),
+    };
+
     return (
         <>
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{
+                    __html: JSON.stringify(personSchema),
+                }}
+            />
             <ProfileViewTracker userId={user._id.toString()} />
             <main
                 className={`${inter.className} min-h-screen`}
@@ -170,10 +215,13 @@ export default async function BioPage({ params }) {
                 }}
             >
                 <div className="max-w-md mx-auto py-16 sm:py-20 px-4 sm:px-6">
-                    <div className="text-center space-y-4 rounded-[32px] border backdrop-blur-xl p-8" style={{
-                        background: theme.cardColor,
-                        borderColor: theme.cardBorder || theme.borderColor,
-                    }}>
+                    <div
+                        className="text-center space-y-4 rounded-[32px] border backdrop-blur-xl p-8"
+                        style={{
+                            background: theme.cardColor,
+                            borderColor: theme.cardBorder || theme.borderColor,
+                        }}
+                    >
                         <div className="relative inline-block">
                             <div
                                 className="absolute -inset-1 rounded-full blur-md opacity-50"
@@ -257,7 +305,16 @@ export default async function BioPage({ params }) {
                                     lineHeight: "1.20",
                                 }}
                             >
-                                Made with <a href="https://snapbio.usersynax.dev" target="_blank" rel="noopener noreferrer" style={{ color: theme.accentGradient }} className="underline">Snapbio</a>
+                                Made with{" "}
+                                <a
+                                    href="https://snapbio.usersynax.dev"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    style={{ color: theme.accentGradient }}
+                                    className="underline"
+                                >
+                                    Snapbio
+                                </a>
                             </p>
                         )}
                     </div>
