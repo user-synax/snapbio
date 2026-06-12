@@ -245,8 +245,21 @@ export default function BuilderClient({
                 >
                     Preview
                 </h2>
-                <div className="rounded-[20px] p-8 bg-[#090909]">
-                    <div className="max-w-md mx-auto text-center space-y-4">
+                <div
+                    className="rounded-[20px] p-8"
+                    style={{
+                        background: theme.bgGradient,
+                        backgroundSize: "cover",
+                    }}
+                >
+                    <div
+                        className="max-w-md mx-auto text-center space-y-4 rounded-[32px] border backdrop-blur-xl p-8"
+                        style={{
+                            background: theme.cardColor,
+                            borderColor: theme.cardBorder || theme.borderColor,
+                            boxShadow: `0 8px 32px ${theme.shadowColor}`,
+                        }}
+                    >
                         <div className="relative inline-block">
                             <div
                                 className="absolute -inset-1 rounded-full blur-md opacity-50"
@@ -413,21 +426,26 @@ export default function BuilderClient({
                             {links
                                 .filter((l) => l.isActive !== false)
                                 .map((link) => {
-                                    const IconComp = link.icon ? faIcons[`Fa${link.icon}`] : null;
+                                    const IconComp = link.icon
+                                        ? faIcons[`Fa${link.icon}`]
+                                        : null;
                                     return (
                                         <div
                                             key={link._id}
-                                            className="flex items-center justify-center gap-3 px-4 py-3 rounded-[20px] text-center font-medium"
+                                            className="flex items-center justify-center gap-3 px-4 py-3 rounded-[20px] text-center font-medium transition-all"
                                             style={{
                                                 background: theme.buttonBg,
                                                 color: theme.buttonText,
+                                                boxShadow: `0 2px 8px ${theme.shadowColor}`,
                                                 fontFamily: "var(--font-inter)",
                                                 fontSize: "14px",
                                                 letterSpacing: "-0.14px",
                                                 lineHeight: "1.0",
                                             }}
                                         >
-                                            {IconComp && <IconComp className="w-5 h-5" />}
+                                            {IconComp && (
+                                                <IconComp className="w-5 h-5" />
+                                            )}
                                             {link.title}
                                         </div>
                                     );
@@ -730,7 +748,8 @@ export default function BuilderClient({
                             {addIcon ? (
                                 <>
                                     {(() => {
-                                        const IconComp = faIcons[`Fa${addIcon}`];
+                                        const IconComp =
+                                            faIcons[`Fa${addIcon}`];
                                         return IconComp ? (
                                             <IconComp className="w-5 h-5 text-white" />
                                         ) : null;
@@ -819,7 +838,10 @@ export default function BuilderClient({
             )}
 
             <div className="bg-[#141414] rounded-[20px] p-6 border border-[#262626]">
-                <h2 className={`${plusJakarta.className} text-xl font-bold text-white mb-4`} style={{ letterSpacing: "-1.0px" }}>
+                <h2
+                    className={`${plusJakarta.className} text-xl font-bold text-white mb-4`}
+                    style={{ letterSpacing: "-1.0px" }}
+                >
                     Appearance
                 </h2>
                 <ThemePicker currentTheme={currentTheme} isPro={isPro} />
@@ -828,8 +850,11 @@ export default function BuilderClient({
             {/* Icon Picker Modal */}
             <IconPicker
                 selectedIcon={
-                    iconPickerTarget === "add" ? addIcon :
-                    iconPickerTarget === "edit" ? editIcon : null
+                    iconPickerTarget === "add"
+                        ? addIcon
+                        : iconPickerTarget === "edit"
+                          ? editIcon
+                          : null
                 }
                 onSelectIcon={(iconName) => {
                     if (iconPickerTarget === "add") {
