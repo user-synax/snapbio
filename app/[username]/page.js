@@ -220,6 +220,7 @@ export default async function BioPage({ params }) {
                         style={{
                             background: theme.cardColor,
                             borderColor: theme.cardBorder || theme.borderColor,
+                            boxShadow: `0 8px 32px ${theme.shadowColor}`,
                         }}
                     >
                         <div className="relative inline-block">
@@ -310,8 +311,23 @@ export default async function BioPage({ params }) {
                                     href="https://snapbio.usersynax.dev"
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    style={{ color: theme.accentGradient }}
-                                    className="underline"
+                                    className="underline transition-colors duration-200"
+                                    style={{
+                                        color: theme.focusRing,
+                                        textDecorationColor: theme.focusRing,
+                                    }}
+                                    onMouseEnter={(e) => {
+                                        e.currentTarget.style.color =
+                                            theme.linkHoverColor;
+                                        e.currentTarget.style.textDecorationColor =
+                                            theme.linkHoverColor;
+                                    }}
+                                    onMouseLeave={(e) => {
+                                        e.currentTarget.style.color =
+                                            theme.focusRing;
+                                        e.currentTarget.style.textDecorationColor =
+                                            theme.focusRing;
+                                    }}
                                 >
                                     Snapbio
                                 </a>
