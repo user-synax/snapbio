@@ -54,7 +54,7 @@ export default function SignUpPage() {
       setIsSuccess(true);
       setTimeout(() => {
         signIn("credentials", {
-          email, password, redirect: true, callbackUrl: "/"
+          email, password, redirect: true, callbackUrl: "/dashboard"
         });
       }, 1500);
     } catch (err) {
@@ -187,7 +187,7 @@ export default function SignUpPage() {
               </div>
 
               <button
-                onClick={() => signIn("google")}
+                onClick={() => signIn("google", { callbackUrl: "/dashboard" })}
                 className="w-full py-3 px-4 rounded-full bg-[#1c1c1c] text-white border border-[#262626] font-medium hover:bg-[#262626] transition-colors flex items-center justify-center gap-3"
               >
                 <svg className="w-5 h-5" viewBox="0 0 24 24">
