@@ -216,17 +216,21 @@ export default async function BioPage({ params }) {
             >
                 <div className="max-w-md mx-auto py-16 sm:py-20 px-4 sm:px-6">
                     <div
-                        className="text-center space-y-4 rounded-[32px] border backdrop-blur-xl p-8"
+                        className="text-center space-y-4 border backdrop-blur-xl p-8"
                         style={{
                             background: theme.cardColor,
                             borderColor: theme.cardBorder || theme.borderColor,
-                            boxShadow: `0 8px 32px ${theme.shadowColor}`,
+                            boxShadow: `0 8px 129px ${theme.shadowColor}`,
+                            borderRadius: theme.cardRadius,
                         }}
                     >
                         <div className="relative inline-block">
                             <div
                                 className="absolute -inset-1 rounded-full blur-md opacity-50"
-                                style={{ background: theme.accentGradient }}
+                                style={{
+                                    background: theme.accentColor,
+                                    boxShadow: `0 0 24px ${theme.glowColor}`,
+                                }}
                             />
                             {user.avatarUrl || user.image ? (
                                 <img
