@@ -24,7 +24,6 @@ export const metadata = {
     description:
         "Create a beautifully branded Linktree-style bio page that consolidates your links, socials, and content into one shareable profile.",
     metadataBase,
-    viewport: { width: "device-width", initialScale: 1, maximumScale: 1 },
     themeColor: "#0A0A0F",
     keywords: [
         "bio link page",
@@ -109,6 +108,12 @@ export const metadata = {
             },
         ],
     },
+};
+
+export const viewport = {
+    width: "device-width",
+    initialScale: 1,
+    maximumScale: 1,
 };
 
 export default function RootLayout({ children }) {
