@@ -1,4 +1,3 @@
-
 import Link from "next/link";
 import { Plus_Jakarta_Sans, Inter } from "next/font/google";
 import { ArrowRight } from "lucide-react";
@@ -55,7 +54,6 @@ export default function Home() {
             {/* Navbar */}
             <nav className="fixed top-4 left-1/2 -translate-x-1/2 z-50 w-[95vw] md:w-[80vw] max-w-6xl">
                 <div className="bg-[#0A0A0F]/80 backdrop-blur-xl border border-[#2A2A35] rounded-full px-6 py-3 flex items-center justify-between">
-
                     <Link href="/" className="flex items-center gap-2 shrink-0">
                         <span
                             className={`${plusJakarta.className} text-2xl font-bold tracking-tight`}
@@ -79,7 +77,6 @@ export default function Home() {
                             Create account
                         </Link>
                     </div>
-
                 </div>
             </nav>
 
@@ -98,11 +95,14 @@ export default function Home() {
                             <br />
                             One beautiful link.
                         </h1>
-                        <p className="text-base sm:text-lg md:text-xl max-w-lg mx-auto text-gray-400" style={{
-                            textShadow: "0 1px 5px rgba(0,0,0,0.2)"
-                        }}>
-                            Build a stunning bio link page that looks great
-                            on every device — in minutes.
+                        <p
+                            className="text-base sm:text-lg md:text-xl max-w-lg mx-auto text-gray-400"
+                            style={{
+                                textShadow: "0 1px 5px rgba(0,0,0,0.2)",
+                            }}
+                        >
+                            Build a stunning bio link page that looks great on
+                            every device — in minutes.
                         </p>
                         <div className="flex flex-col sm:flex-row flex-wrap items-center justify-center gap-4">
                             <Link
@@ -205,8 +205,10 @@ export default function Home() {
                                                 style={{
                                                     background:
                                                         "linear-gradient(135deg,#d89848 0%,#e8a858 100%)",
-                                                    WebkitBackgroundClip: "text",
-                                                    WebkitTextFillColor: "transparent",
+                                                    WebkitBackgroundClip:
+                                                        "text",
+                                                    WebkitTextFillColor:
+                                                        "transparent",
                                                 }}
                                             >
                                                 Alex Chen
@@ -217,14 +219,19 @@ export default function Home() {
                                             </p>
 
                                             <p className="text-sm mt-4 text-[#a89888] leading-relaxed">
-                                                Designer & Developer crafting thoughtful
-                                                digital experiences for the modern web.
+                                                Designer & Developer crafting
+                                                thoughtful digital experiences
+                                                for the modern web.
                                             </p>
                                         </div>
 
                                         {/* Links */}
                                         <div className="mt-6 space-y-3">
-                                            {["Portfolio", "Twitter / X", "GitHub"].map((item) => (
+                                            {[
+                                                "Portfolio",
+                                                "Twitter / X",
+                                                "GitHub",
+                                            ].map((item) => (
                                                 <div
                                                     key={item}
                                                     className="flex items-center justify-between px-5 py-4 rounded-2xl transition-all"
@@ -247,7 +254,6 @@ export default function Home() {
                                 </div>
                             </div>
                         </div>
-
                     </div>
                 </section>
 
@@ -261,7 +267,6 @@ export default function Home() {
                         </h2>
 
                         <div className="grid grid-cols-1 md:grid-cols-6 gap-5">
-
                             {/* Large Builder Card */}
                             <div className="md:col-span-4 bg-[#141414] rounded-[30px] p-8 min-h-80 flex flex-col justify-between">
                                 <div>
@@ -302,7 +307,8 @@ export default function Home() {
                                 </div>
 
                                 <p className="text-white/80">
-                                    Customize colors, fonts and layouts instantly.
+                                    Customize colors, fonts and layouts
+                                    instantly.
                                 </p>
                             </div>
 
@@ -390,8 +396,8 @@ export default function Home() {
                                 </h3>
 
                                 <p className="text-[#999999] mt-4 max-w-sm">
-                                    Describe yourself and Snapbio creates a profile,
-                                    links and theme automatically.
+                                    Describe yourself and Snapbio creates a
+                                    profile, links and theme automatically.
                                 </p>
                             </div>
 
@@ -414,7 +420,6 @@ export default function Home() {
                                     anytime.
                                 </p>
                             </div>
-
                         </div>
                     </div>
                 </section>
@@ -473,13 +478,14 @@ export default function Home() {
                                     >
                                         <div
                                             className="absolute bottom-0 left-0 right-0 h-1/2"
-                                            style={{ backgroundColor: theme.card }}
+                                            style={{
+                                                backgroundColor: theme.card,
+                                            }}
                                         />
                                         <div
                                             className="absolute bottom-4 left-4 right-4 h-2 rounded-full"
                                             style={{
-                                                backgroundColor:
-                                                    theme.accent,
+                                                backgroundColor: theme.accent,
                                             }}
                                         />
                                     </div>
@@ -601,6 +607,21 @@ export default function Home() {
                     </p>
                 </div>
             </footer> */}
+
+            {/* Floating Product Hunt Badge */}
+            <div className="fixed bottom-6 right-6 z-50">
+                <a
+                    href="https://www.producthunt.com/products/snapbio-2?embed=true&utm_source=badge-featured&utm_medium=badge&utm_campaign=badge-snapbio-2"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >
+                    <img
+                        alt="Snapbio - All in one bio page for your socials | Product Hunt"
+                        src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1170547&theme=dark&t=1781323732235"
+                        className="w-[120px] sm:w-[160px] md:w-[180px] lg:w-[200px] h-auto transition-transform hover:scale-105"
+                    />
+                </a>
+            </div>
 
             <Footer />
         </div>
