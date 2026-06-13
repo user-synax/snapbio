@@ -32,6 +32,7 @@ export default function BioLinks({ links, theme, userId }) {
                         buttonHoverShadow={theme.buttonHoverShadow}
                         shadowColor={theme.shadowColor}
                         focusRing={theme.focusRing}
+                        buttonRadius={theme.buttonRadius}
                         onClick={() => handleLinkClick(link._id)}
                         icon={IconComponent}
                     >
