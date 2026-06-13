@@ -5,7 +5,6 @@ import WaveBackground from "@/components/WaveBackground";
 import HeroButton from "../components/aura/heroButton";
 import PricingCard from "../components/aura/heroPricingCard";
 import Footer from "../components/aura/footer";
-import Image from "next/image";
 
 const plusJakarta = Plus_Jakarta_Sans({ subsets: ["latin"] });
 const inter = Inter({ subsets: ["latin"] });
