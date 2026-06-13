@@ -14,6 +14,7 @@ export default function ThemeButton({
     buttonHoverShadow,
     shadowColor,
     focusRing,
+    buttonRadius,
     onClick,
     icon: IconComponent,
 }) {
@@ -23,7 +24,7 @@ export default function ThemeButton({
             target="_blank"
             rel="noopener noreferrer"
             onClick={onClick}
-            className={`${inter.className} flex items-center justify-center gap-3 w-full px-4 py-3 rounded-[20px] text-center font-medium transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] outline-none focus-visible:ring-2 focus-visible:ring-offset-2`}
+            className={`${inter.className} flex items-center justify-center gap-3 w-full px-4 py-3 text-center font-medium transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] outline-none focus-visible:ring-2 focus-visible:ring-offset-2`}
             style={{
                 background: buttonBg,
                 color: buttonText,
@@ -32,14 +33,15 @@ export default function ThemeButton({
                 lineHeight: "1.0",
                 boxShadow: `0 2px 8px ${shadowColor}`,
                 outline: "none",
-            }}
-            onMouseEnter={(e) => {
-                e.currentTarget.style.background = buttonHoverBg;
-                e.currentTarget.style.boxShadow = buttonHoverShadow;
+                borderRadius: buttonRadius || "20px",
             }}
             onMouseLeave={(e) => {
                 e.currentTarget.style.background = buttonBg;
                 e.currentTarget.style.boxShadow = `0 2px 8px ${shadowColor}`;
+            }}
+            onMouseEnter={(e) => {
+                e.currentTarget.style.background = buttonHoverBg;
+                e.currentTarget.style.boxShadow = buttonHoverShadow;
             }}
             onFocus={(e) => {
                 e.currentTarget.style.boxShadow = `0 0 0 3px ${focusRing}`;
